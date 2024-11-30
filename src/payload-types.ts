@@ -410,14 +410,47 @@ export interface Post {
  */
 export interface User {
   id: string;
-  name?: string | null;
-  updatedAt: string;
+  name: string;
+  role?: ('STUDENT' | 'PARENT' | 'ADMIN' | 'MANAGER') | null;
+  studentDetails?: {
+    course: string;
+    batch?: string | null;
+    attendance?: number | null;
+    parentId?: (string | null) | User;
+  };
+  parentDetails?: {
+    contactNumber: string;
+    address?: string | null;
+    children?: (string | User)[] | null;
+  };
+  adminDetails?: {
+    permissions?:
+      | {
+          module?: string | null;
+          accessLevel?: ('Read' | 'Write' | 'Admin') | null;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  managerDetails?: {
+    assignedCenters?:
+      | {
+          centerName?: string | null;
+          location?: string | null;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  isActive?: boolean | null;
   createdAt: string;
+  updatedAt: string;
   email: string;
   resetPasswordToken?: string | null;
   resetPasswordExpiration?: string | null;
   salt?: string | null;
   hash?: string | null;
+  _verified?: boolean | null;
+  _verificationToken?: string | null;
   loginAttempts?: number | null;
   lockUntil?: string | null;
   password?: string | null;
@@ -1026,13 +1059,54 @@ export interface CategoriesSelect<T extends boolean = true> {
  */
 export interface UsersSelect<T extends boolean = true> {
   name?: T;
-  updatedAt?: T;
+  role?: T;
+  studentDetails?:
+    | T
+    | {
+        course?: T;
+        batch?: T;
+        attendance?: T;
+        parentId?: T;
+      };
+  parentDetails?:
+    | T
+    | {
+        contactNumber?: T;
+        address?: T;
+        children?: T;
+      };
+  adminDetails?:
+    | T
+    | {
+        permissions?:
+          | T
+          | {
+              module?: T;
+              accessLevel?: T;
+              id?: T;
+            };
+      };
+  managerDetails?:
+    | T
+    | {
+        assignedCenters?:
+          | T
+          | {
+              centerName?: T;
+              location?: T;
+              id?: T;
+            };
+      };
+  isActive?: T;
   createdAt?: T;
+  updatedAt?: T;
   email?: T;
   resetPasswordToken?: T;
   resetPasswordExpiration?: T;
   salt?: T;
   hash?: T;
+  _verified?: T;
+  _verificationToken?: T;
   loginAttempts?: T;
   lockUntil?: T;
 }
